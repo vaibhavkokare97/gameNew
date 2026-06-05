@@ -5,6 +5,7 @@ using Assets.Scripts.State;
 using System;
 using UnityEngine;
 using Assets.Scripts.UI;
+using Assets.Scripts.Card;
 
 namespace Assets.Scripts.Controller
 {
@@ -24,6 +25,9 @@ namespace Assets.Scripts.Controller
         [SerializeField] private AudioManager _audioManager;
         public AudioManager AudioManager => _audioManager;
 
+        [SerializeField] private CardController _cardController;
+        public CardController CardController => _cardController;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -32,18 +36,6 @@ namespace Assets.Scripts.Controller
             }
 
             Instance = this;
-        }
-
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 }

@@ -13,4 +13,22 @@ MonoBehaviour:
   m_Name: AllCardsGameData
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Card.AllCardsGameData
   AllCards:
-  - {fileID: 11400000, guid: eef072b282baaef44a154843db367fa1, type: 2}
+  - {fileID: 21300000, guid: 482f7ee9038d790448607e302d097626, type: 3}
+  - {fileID: 21300000, guid: 10400d96684674540bce46be194e49c3, type: 3}
+  - {fileID: 21300000, guid: a00607f8ca75a32409c8e1ce5660a776, type: 3}
+  - {fileID: 21300000, guid: fff94f2952d74f74798a941ed0796f49, type: 3}
+  - {fileID: 21300000, guid: 3931dac1d68cf1648bea2384b0258f18, type: 3}
+  - {fileID: 21300000, guid: 5042a92515f46ce4487c21922bcd35d6, type: 3}
+  - {fileID: 21300000, guid: 168424dfd91523a4aa7c986dafe51678, type: 3}
+  - {fileID: 21300000, guid: a2197e7b105c3444684148306126df3e, type: 3}
+  - {fileID: 21300000, guid: 1740cb39f3cf39a4f9b18c17ae73c5cb, type: 3}
+  - {fileID: 21300000, guid: c9c006e747bee394b8a5b2a1c1c30e34, type: 3}
+  - {fileID: 21300000, guid: 6ac77f33ea23aef48b456133a7663daf, type: 3}
+  - {fileID: 21300000, guid: 135a379bc92011443b5a553af618a604, type: 3}
+  - {fileID: 21300000, guid: 93b90769b6f27904aa0a9b97b7943f1d, type: 3}
+  - {fileID: 21300000, guid: 40163ba14fe0e184c8d56b7a9166cd6e, type: 3}
+  - {fileID: 21300000, guid: bc73356162f16fb4d8db8b9d7fb325dd, type: 3}
+  - {fileID: 21300000, guid: 3f09f77f14fb90743a2ebf2807e37b8e, type: 3}
+  - {fileID: 21300000, guid: cc23fc6ea5096724d83ee430dab8092a, type: 3}
+  - {fileID: 21300000, guid: 0fd5193a99240c740b1b74020f954f38, type: 3}
+  - {fileID: 21300000, guid: c483d4bea12933a46a4ac7432ae9de13, type: 3}

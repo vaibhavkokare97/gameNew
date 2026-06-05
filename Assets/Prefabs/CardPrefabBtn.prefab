@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 884995156162981678}
   - component: {fileID: 6545646403282547882}
   - component: {fileID: 8786086679996814084}
+  - component: {fileID: 2263708035353130088}
   m_Layer: 5
   m_Name: CardPrefabBtn
   m_TagString: Untagged
@@ -210,3 +211,51 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2263708035353130088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018923086013277782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72a03a59cfa7a7940b27e37a2697a290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Card.CardView
+  cardId: 0
+  _spriteImage: {fileID: 2147673499234536618}
+  flipDuration: 1
+  flipCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.21444099
+      value: 0.72646
+      inSlope: 1.0249797
+      outSlope: 1.0249797
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.4870383
+      outWeight: 0.15026946
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
