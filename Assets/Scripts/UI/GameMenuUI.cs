@@ -20,7 +20,7 @@ namespace Assets.Scripts.UI
         {
             homeButton.onClick.AddListener(() =>
             {
-                UIManager.OnGameStopUI?.Invoke();
+                UIManager.OnGameStopUI?.Invoke(false);
             });
         }
 
@@ -28,14 +28,14 @@ namespace Assets.Scripts.UI
         {
             if(AppState.currentState == AppState.State.InGame && Input.GetKeyDown(KeyCode.Escape))
             {
-                UIManager.OnGameStopUI?.Invoke();
+                UIManager.OnGameStopUI?.Invoke(false);
             }
         }
 
         private void OnEnable()
         {
             UIManager.OnGameStartUI += ((int, int) tuple, int arg2, int arg3) => gameMenuPanel.gameObject.SetActive(true);
-            UIManager.OnGameStopUI += () => gameMenuPanel.gameObject.SetActive(false);
+            UIManager.OnGameStopUI += (bool? gameWon) => gameMenuPanel.gameObject.SetActive(false);
             UIManager.OnGameStartUI += AdjustGridLayout;
         }
 
@@ -43,12 +43,25 @@ namespace Assets.Scripts.UI
         {
             UIManager.OnGameStartUI -= AdjustGridLayout;
             UIManager.OnGameStartUI = ((int, int) tuple, int arg2, int arg3) => gameMenuPanel.gameObject.SetActive(true);
-            UIManager.OnGameStopUI -= () => gameMenuPanel.gameObject.SetActive(false);
+            UIManager.OnGameStopUI -= (bool? gameWon) => gameMenuPanel.gameObject.SetActive(false);
         }
 
-        public void AdjustGridLayout((int, int) levelDimensions, int levelDifficulty, int seed)
+        private void AdjustGridLayout((int, int) levelDimensions, int levelDifficulty, int seed)
         {
             gridLayoutGroup.constraintCount = levelDimensions.Item2;
+
+            if(levelDimensions.Item1 * levelDimensions.Item2 <= 4)
+            {
+                gridLayoutGroup.cellSize = new Vector2(200, 200);
+            }
+            else if (levelDimensions.Item1 * levelDimensions.Item2 <= 16)
+            {
+                gridLayoutGroup.cellSize = new Vector2(150, 150);
+            }
+            else
+            {
+                gridLayoutGroup.cellSize = new Vector2(120, 120);
+            }
         }
 
 

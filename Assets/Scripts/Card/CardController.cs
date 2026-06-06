@@ -27,7 +27,7 @@ namespace Assets.Scripts.Card
             UIManager.OnGameStopUI += ClearBoard;
         }
 
-        private void ClearBoard()
+        private void ClearBoard(bool? gameWon)
         {
             foreach (Transform child in cardUIParent)
             {

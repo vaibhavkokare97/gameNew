@@ -57,6 +57,7 @@ namespace Assets.Scripts.Controller
                 scoreManager.Reset();
                 scoreManager.Seed = seed;
                 scoreManager.DifficultyLevel = levelDifficulty;
+                scoreManager.LevelDimension = levelDimensions;
             };
         }
 
@@ -69,7 +70,7 @@ namespace Assets.Scripts.Controller
         private IEnumerator DelayedGameStopUI()
         {
             yield return new WaitForSeconds(1f); // Adjust the delay as needed
-            UIManager.OnGameStopUI?.Invoke();
+            UIManager.OnGameStopUI?.Invoke(true);
         }
 
         private void HandleGameStartUI((int, int) levelDimensions, int levelDifficulty, int seed)
@@ -78,10 +79,15 @@ namespace Assets.Scripts.Controller
             AppState.currentState = AppState.State.InGame;
         }
 
-        private void HandleGameStopUI()
+        private void HandleGameStopUI(bool? gameWon)
         {
             AppState.currentState = AppState.State.MainMenu;
-            SaveManager.Save(new SaveData(scoreManager.DifficultyLevel, scoreManager.Seed, new List<int>(scoreManager.SolvedIDs).ToArray(), scoreManager.MatchCount, scoreManager.TurnCount));
+            if (gameWon == false)
+            {
+                SaveManager.Save(new SaveData(scoreManager.DifficultyLevel, scoreManager.Seed, 
+                    new List<int>(scoreManager.SolvedIDs).ToArray(), 
+                    scoreManager.MatchCount, scoreManager.TurnCount));
+            }
             scoreManager.Reset();
         }
 
@@ -131,6 +137,7 @@ namespace Assets.Scripts.Controller
                 scoreManager.Reset();
                 scoreManager.Seed = seed;
                 scoreManager.DifficultyLevel = levelDifficulty;
+                scoreManager.LevelDimension = levelDimensions;
             };
 
             scoreManager = null;

@@ -52,6 +52,8 @@ namespace Assets.Scripts.Card
 
         private IEnumerator Start()
         {
+            ResetCardToItsBoundingBox();
+
             yield return new WaitForSeconds( cardViewDuration );
            
             if(_cardController.IsCardSolved(cardId))
@@ -151,6 +153,17 @@ namespace Assets.Scripts.Card
 
             if (_cardController.lastDrawnCard == null) _cardController.lastDrawnCard = this;
             yield return null;
+        }
+
+        private void ResetCardToItsBoundingBox()
+        {
+            RectTransform rt = _spriteImage.rectTransform;
+
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
         }
 
         public void DisableCard()

@@ -15,6 +15,7 @@ namespace Assets.Scripts.Score
 
         public int Seed;
         public int DifficultyLevel;
+        public (int, int) LevelDimension;
         public HashSet<int> SolvedIDs = new HashSet<int>();
         public int MatchCount { get; private set; }
         public int TurnCount { get; private set; }
@@ -27,10 +28,11 @@ namespace Assets.Scripts.Score
             MatchCount++;
             OnScoreUpdated?.Invoke(MatchCount, TurnCount);
 
-            if(MatchCount == SolvedIDs.Count)
+            if(MatchCount == Mathf.FloorToInt((float)LevelDimension.Item1 * LevelDimension.Item2 / 2))
             {
                 // All cards matched
                 // GAME won
+                Debug.Log("Game Won!");
                 OnGameWon?.Invoke();
             }
         }

@@ -33,8 +33,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5429319559797236072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.000061035156, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -226,6 +226,7 @@ MonoBehaviour:
   cardId: 0
   _spriteImage: {fileID: 2147673499234536618}
   flipDuration: 0.3
+  cardViewDuration: 2
   flipCurve:
     serializedVersion: 2
     m_Curve:

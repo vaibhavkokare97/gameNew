@@ -65,7 +65,7 @@ namespace Assets.Scripts.UI
         private void OnEnable()
         {
             UIManager.OnGameStartUI += ((int, int) tuple, int arg2, int arg3) => mainMenuPanel.gameObject.SetActive(false);
-            UIManager.OnGameStopUI += () => mainMenuPanel.gameObject.SetActive(true);
+            UIManager.OnGameStopUI += (bool? gameWon) => mainMenuPanel.gameObject.SetActive(true);
         }
 
         private void Update()
@@ -95,7 +95,7 @@ namespace Assets.Scripts.UI
         private void OnDisable()
         {
             UIManager.OnGameStartUI -= ((int, int) tuple, int arg2, int arg3) => mainMenuPanel.gameObject.SetActive(false);
-            UIManager.OnGameStopUI -= () => mainMenuPanel.gameObject.SetActive(true);
+            UIManager.OnGameStopUI -= (bool? gameWon) => mainMenuPanel.gameObject.SetActive(true);
         }
     }
 }
