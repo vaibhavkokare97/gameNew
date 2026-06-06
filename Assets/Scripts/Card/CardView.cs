@@ -21,6 +21,7 @@ namespace Assets.Scripts.Card
             }
         }
 
+        private CardController _cardController;
 
         [Header("Visuals")]
         [SerializeField] private Image _spriteImage;
@@ -40,7 +41,12 @@ namespace Assets.Scripts.Card
 
         private void Awake()
         {
-            GetComponent<Button>().onClick.AddListener(() => Flip());
+            _cardController = FindAnyObjectByType<CardController>();
+            GetComponent<Button>().onClick.AddListener(delegate
+            {
+                StartCoroutine(FlipAndMatch());
+            }
+            );
         }
 
         private void Start()
@@ -48,13 +54,20 @@ namespace Assets.Scripts.Card
             Flip(); // start face down
         }
 
-        public void Flip()
+        private void Flip()
         {
             if (isFlipping)
                 return;
 
-            Debug.Log("clicked card with id: " + cardId);
             StartCoroutine(FlipAnimation());
+        }
+
+        private IEnumerator FlipAndMatch()
+        {
+            if (isFlipping)
+                yield break;
+            yield return FlipAnimation();
+            yield return CheckForCardMatch();
         }
 
         private IEnumerator FlipAnimation()
@@ -85,9 +98,7 @@ namespace Assets.Scripts.Card
                 {
                     visualSwapped = true;
 
-                    _spriteImage.sprite = isFaceUp
-                        ? cardSprite
-                        : GameManager.Instance.CardController.defaultSprite;
+                    _spriteImage.sprite = isFaceUp ? cardSprite : _cardController.defaultSprite;
                 }
 
                 yield return null;
@@ -99,11 +110,46 @@ namespace Assets.Scripts.Card
             isFaceUp = !isFaceUp;
 
             isFlipping = false;
+        }
 
-            if (!isFaceUp)
+        IEnumerator CheckForCardMatch()
+        {
+            if (_cardController.lastDrawnCard != null)
             {
-                Flip(); // to hide
+                if ( MatchFound(_cardController.lastDrawnCard))
+                {
+                    // remove animation
+                    Debug.Log("Match found for card id: " + cardId);
+                    Destroy(_cardController.lastDrawnCard._spriteImage);
+                    Destroy(_spriteImage);
+                    _cardController.lastDrawnCard = null;
+
+                }
+                else
+                {
+                    if (!IsFaceUp) Flip();
+                    if (!_cardController.lastDrawnCard.IsFaceUp) _cardController.lastDrawnCard.Flip();
+                }
+
+                _cardController.lastDrawnCard = null;
+                yield break;
             }
+
+            if (_cardController.lastDrawnCard == null) _cardController.lastDrawnCard = this;
+            yield return null;
+        }
+
+
+
+        public bool MatchFound(CardView otherCard)
+        {
+            if (otherCard == null) return false;
+
+            if (otherCard.cardId == cardId && otherCard != this)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

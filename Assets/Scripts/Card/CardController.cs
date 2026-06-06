@@ -13,6 +13,8 @@ namespace Assets.Scripts.Card
         public Transform cardUIParent;
         public CardView cardViewPrefab;
 
+        public CardView lastDrawnCard = null;
+
         public static Action<List<int>> OnBoardGenerateCallback;
 
         private void Start()
@@ -36,7 +38,6 @@ namespace Assets.Scripts.Card
                 CardView cardView = Instantiate(cardViewPrefab, cardUIParent).GetComponent<CardView>();
                 cardView.cardSprite = allCardsGameData.AllCards[i];
                 cardView.cardId = i;
-
             }
         }
 

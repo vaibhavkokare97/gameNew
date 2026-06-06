@@ -225,7 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Card.CardView
   cardId: 0
   _spriteImage: {fileID: 2147673499234536618}
-  flipDuration: 1
+  flipDuration: 0.3
   flipCurve:
     serializedVersion: 2
     m_Curve:
