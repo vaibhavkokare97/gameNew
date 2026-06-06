@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using Assets.Scripts.Controller;
 
 namespace Assets.Scripts.Card
 {
@@ -29,9 +28,8 @@ namespace Assets.Scripts.Card
 
         [Header("Animation")]
         [SerializeField] private float flipDuration = 0.25f;
-        [SerializeField]
-        private AnimationCurve flipCurve =
-            AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+        [SerializeField] private float cardViewDuration = 2f;
+        [SerializeField] private AnimationCurve flipCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
         private bool isFaceUp;
         private bool isFlipping;
@@ -42,6 +40,7 @@ namespace Assets.Scripts.Card
         private void Awake()
         {
             _cardController = FindAnyObjectByType<CardController>();
+            GetComponent<Button>().interactable = false;
             GetComponent<Button>().onClick.AddListener(delegate
             {
                 StartCoroutine(FlipAndMatch());
@@ -49,9 +48,11 @@ namespace Assets.Scripts.Card
             );
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return new WaitForSeconds( cardViewDuration );
             Flip(); // start face down
+            GetComponent<Button>().interactable = true;
         }
 
         private void Flip()

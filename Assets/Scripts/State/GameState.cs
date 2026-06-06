@@ -19,5 +19,7 @@
             PauseMenu,
             GameOver
         }
+
+        public static State currentState = AppState.State.MainMenu;
     }
 }

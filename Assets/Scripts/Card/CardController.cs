@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using Assets.Scripts.UI;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,16 +15,30 @@ namespace Assets.Scripts.Card
 
         public CardView lastDrawnCard = null;
 
-        public static Action<List<int>> OnBoardGenerateCallback;
+        public static Action<(int, int)> OnBoardGenerateCallback;
 
         public static Action<int> OnTurnComplete;
         public static Action<int> OnMatchComplete;
         public static Action OnFlipInitiated;
 
-        private void Start()
+        private void OnEnable()
         {
-            List<int> board = BoardGenerator.GenerateBoard(4, 4, allCardsGameData.AllCards.Length, 12345);
-            OnBoardGenerateCallback?.Invoke(board);
+            UIManager.OnGameStopUI += ClearBoard;
+        }
+
+        private void ClearBoard()
+        {
+            foreach (Transform child in cardUIParent)
+            {
+                Destroy(child.gameObject);
+            }
+            lastDrawnCard = null;
+        }
+
+        public void Initiate((int, int) levelDifficulty, int seed)
+        {
+            List<int> board = BoardGenerator.GenerateBoard(levelDifficulty.Item1, levelDifficulty.Item2, allCardsGameData.AllCards.Length, seed);
+            OnBoardGenerateCallback?.Invoke(levelDifficulty);
 
             LayBoard(board);
         }
@@ -45,6 +59,9 @@ namespace Assets.Scripts.Card
             }
         }
 
-        
+        private void OnDisable()
+        {
+            UIManager.OnGameStopUI -= ClearBoard;
+        }
     }
 }
