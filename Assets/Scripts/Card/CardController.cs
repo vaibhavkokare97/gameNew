@@ -17,6 +17,10 @@ namespace Assets.Scripts.Card
 
         public static Action<List<int>> OnBoardGenerateCallback;
 
+        public static Action<int> OnTurnComplete;
+        public static Action<int> OnMatchComplete;
+        public static Action OnFlipInitiated;
+
         private void Start()
         {
             List<int> board = BoardGenerator.GenerateBoard(4, 4, allCardsGameData.AllCards.Length, 12345);

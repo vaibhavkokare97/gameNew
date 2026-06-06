@@ -1,21 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Audio
 {
-    public class AudioManager : MonoBehaviour
+    public class AudioManager
     {
-
-        // Use this for initialization
-        void Start()
+        public AudioManager()
         {
-
+            
         }
 
-        // Update is called once per frame
-        void Update()
-        {
+        public static Action<int> OnPlayOneShot;
 
+        public void PlayOneShot(int clipId)
+        {
+            OnPlayOneShot?.Invoke(clipId);
         }
+
     }
 }

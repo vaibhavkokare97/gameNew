@@ -80,6 +80,8 @@ namespace Assets.Scripts.Card
             float elapsed = 0f;
             bool visualSwapped = false;
 
+            CardController.OnFlipInitiated?.Invoke();
+
             while (elapsed < flipDuration)
             {
                 elapsed += Time.deltaTime;
@@ -118,11 +120,11 @@ namespace Assets.Scripts.Card
             {
                 if ( MatchFound(_cardController.lastDrawnCard))
                 {
-                    // remove animation
                     Debug.Log("Match found for card id: " + cardId);
                     Destroy(_cardController.lastDrawnCard._spriteImage);
                     Destroy(_spriteImage);
                     _cardController.lastDrawnCard = null;
+                    CardController.OnMatchComplete?.Invoke(cardId);
 
                 }
                 else
@@ -131,6 +133,7 @@ namespace Assets.Scripts.Card
                     if (!_cardController.lastDrawnCard.IsFaceUp) _cardController.lastDrawnCard.Flip();
                 }
 
+                CardController.OnTurnComplete?.Invoke(cardId);
                 _cardController.lastDrawnCard = null;
                 yield break;
             }

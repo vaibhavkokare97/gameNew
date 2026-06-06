@@ -3,8 +3,11 @@ using UnityEngine;
 
 namespace Assets.Scripts.SaveLoad
 {
-    public class SaveManager : MonoBehaviour
+    public class SaveManager
     {
+        public SaveManager()
+        {
 
+        }
     }
 }

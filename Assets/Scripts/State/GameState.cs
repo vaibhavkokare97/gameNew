@@ -1,14 +1,14 @@
 ﻿namespace Assets.Scripts.State
 {
-    public static class CardState
-    {
-        public enum State
-        {
-            None,
-            OneFlipped,
-            TwoFlipped
-        }
-    }
+    //public static class CardState
+    //{
+    //    public enum State
+    //    {
+    //        None,
+    //        OneFlipped,
+    //        TwoFlipped
+    //    }
+    //}
 
     public static class AppState
     {
