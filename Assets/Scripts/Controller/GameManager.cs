@@ -5,6 +5,7 @@ using Assets.Scripts.Score;
 using Assets.Scripts.State;
 using Assets.Scripts.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,6 @@ namespace Assets.Scripts.Controller
 
         public UIManager uiManager { get; private set; }
         public ScoreManager scoreManager { get; private set; }
-        public SaveManager saveManager { get; private set; }
         public AudioManager audioManager { get; private set; }
 
         [SerializeField] private CardController _cardController;
@@ -36,7 +36,6 @@ namespace Assets.Scripts.Controller
         private void OnEnable()
         {
             scoreManager = new ScoreManager();
-            saveManager = new SaveManager();
             audioManager = new AudioManager();
             uiManager = new UIManager();
 
@@ -46,23 +45,50 @@ namespace Assets.Scripts.Controller
 
             UIManager.OnGameStartUI += HandleGameStartUI;
             UIManager.OnGameStopUI += HandleGameStopUI;
+            UIManager.OnLoadState += (solvedIDs, matchCount, turnCount) =>
+            {
+                scoreManager.SolvedIDs = new HashSet<int>(solvedIDs);
+                scoreManager.SetScore(matchCount, turnCount);
+            };
+            ScoreManager.OnGameWon += HandleGameWon;
+
+            CardController.OnBoardGenerateCallback += (levelDimensions, levelDifficulty, seed) =>
+            {
+                scoreManager.Reset();
+                scoreManager.Seed = seed;
+                scoreManager.DifficultyLevel = levelDifficulty;
+            };
         }
 
-        private void HandleGameStartUI((int, int) levelDifficulty, int seed)
+        private void HandleGameWon()
         {
-            _cardController.Initiate(levelDifficulty, seed);
+            SaveManager.DeleteSave();
+            StartCoroutine(DelayedGameStopUI());
+        }
+
+        private IEnumerator DelayedGameStopUI()
+        {
+            yield return new WaitForSeconds(1f); // Adjust the delay as needed
+            UIManager.OnGameStopUI?.Invoke();
+        }
+
+        private void HandleGameStartUI((int, int) levelDimensions, int levelDifficulty, int seed)
+        {
+            _cardController.Initiate(levelDimensions, levelDifficulty, seed);
             AppState.currentState = AppState.State.InGame;
         }
 
         private void HandleGameStopUI()
         {
             AppState.currentState = AppState.State.MainMenu;
+            SaveManager.Save(new SaveData(scoreManager.DifficultyLevel, scoreManager.Seed, new List<int>(scoreManager.SolvedIDs).ToArray(), scoreManager.MatchCount, scoreManager.TurnCount));
             scoreManager.Reset();
         }
 
         private void HandleCardMatched(int cardId)
         {
             scoreManager.IncrementMatches();
+            scoreManager.SolvedIDs.Add(cardId);
             audioManager.PlayOneShot(0); // 0 represents the match sound
         }
 
@@ -77,6 +103,13 @@ namespace Assets.Scripts.Controller
             audioManager.PlayOneShot(2); // 2 represents the flip sound
         }
 
+        public bool IsCardSolved(int cardId)
+        {
+            if (cardId == -1)
+                return false;
+            return scoreManager.SolvedIDs.Contains(cardId);
+        }
+
         private void OnDisable()
         {
 
@@ -86,9 +119,21 @@ namespace Assets.Scripts.Controller
 
             UIManager.OnGameStartUI -= HandleGameStartUI;
             UIManager.OnGameStopUI -= HandleGameStopUI;
+            UIManager.OnLoadState -= (solvedIDs, matchCount, turnCount) =>
+            {
+                scoreManager.SolvedIDs = new HashSet<int>(solvedIDs);
+                scoreManager.SetScore(matchCount, turnCount);
+            };
+            ScoreManager.OnGameWon -= HandleGameWon;
+
+            CardController.OnBoardGenerateCallback -= (levelDimensions, levelDifficulty, seed) =>
+            {
+                scoreManager.Reset();
+                scoreManager.Seed = seed;
+                scoreManager.DifficultyLevel = levelDifficulty;
+            };
 
             scoreManager = null;
-            saveManager = null;
             audioManager = null;
             uiManager = null;
 

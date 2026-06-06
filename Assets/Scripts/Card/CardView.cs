@@ -1,3 +1,5 @@
+using Assets.Scripts.SaveLoad;
+using Assets.Scripts.Score;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,8 +53,16 @@ namespace Assets.Scripts.Card
         private IEnumerator Start()
         {
             yield return new WaitForSeconds( cardViewDuration );
-            Flip(); // start face down
-            GetComponent<Button>().interactable = true;
+           
+            if(_cardController.IsCardSolved(cardId))
+            {
+                DisableCard();
+            }
+            else
+            {
+                Flip(); // start face down
+                GetComponent<Button>().interactable = true;
+            }
         }
 
         private void Flip()
@@ -122,8 +132,8 @@ namespace Assets.Scripts.Card
                 if ( MatchFound(_cardController.lastDrawnCard))
                 {
                     Debug.Log("Match found for card id: " + cardId);
-                    Destroy(_cardController.lastDrawnCard._spriteImage);
-                    Destroy(_spriteImage);
+                    _cardController.lastDrawnCard.DisableCard();
+                    DisableCard();
                     _cardController.lastDrawnCard = null;
                     CardController.OnMatchComplete?.Invoke(cardId);
 
@@ -141,6 +151,12 @@ namespace Assets.Scripts.Card
 
             if (_cardController.lastDrawnCard == null) _cardController.lastDrawnCard = this;
             yield return null;
+        }
+
+        public void DisableCard()
+        {
+            GetComponent<Button>().interactable = false;
+            Destroy(_spriteImage);
         }
 
 

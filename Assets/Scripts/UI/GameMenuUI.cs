@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using Assets.Scripts.Card;
 using System;
 using Assets.Scripts.State;
+using Assets.Scripts.SaveLoad;
+using Assets.Scripts.Score;
 
 namespace Assets.Scripts.UI
 {
@@ -32,7 +34,7 @@ namespace Assets.Scripts.UI
 
         private void OnEnable()
         {
-            UIManager.OnGameStartUI += ((int, int) tuple, int arg2) => gameMenuPanel.gameObject.SetActive(true);
+            UIManager.OnGameStartUI += ((int, int) tuple, int arg2, int arg3) => gameMenuPanel.gameObject.SetActive(true);
             UIManager.OnGameStopUI += () => gameMenuPanel.gameObject.SetActive(false);
             UIManager.OnGameStartUI += AdjustGridLayout;
         }
@@ -40,13 +42,13 @@ namespace Assets.Scripts.UI
         private void OnDisable()
         {
             UIManager.OnGameStartUI -= AdjustGridLayout;
-            UIManager.OnGameStartUI = ((int, int) tuple, int arg2) => gameMenuPanel.gameObject.SetActive(true);
+            UIManager.OnGameStartUI = ((int, int) tuple, int arg2, int arg3) => gameMenuPanel.gameObject.SetActive(true);
             UIManager.OnGameStopUI -= () => gameMenuPanel.gameObject.SetActive(false);
         }
 
-        public void AdjustGridLayout((int, int) levelDifficulty, int seed)
+        public void AdjustGridLayout((int, int) levelDimensions, int levelDifficulty, int seed)
         {
-            gridLayoutGroup.constraintCount = levelDifficulty.Item2;
+            gridLayoutGroup.constraintCount = levelDimensions.Item2;
         }
 
 

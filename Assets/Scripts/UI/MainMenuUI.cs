@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.State;
+﻿using Assets.Scripts.SaveLoad;
+using Assets.Scripts.Score;
+using Assets.Scripts.State;
 using System;
 using System.Collections;
 using TMPro;
@@ -14,10 +16,9 @@ namespace Assets.Scripts.UI
         [SerializeField] private ToggleGroup difficultyToggleGroup;
         [SerializeField] private TMP_InputField seedInput;
         [SerializeField] private Button startButton;
+        [SerializeField] private Button loadButton;
 
         [SerializeField] private Button quitButton;
-
-        
 
         private void Awake()
         {
@@ -35,7 +36,26 @@ namespace Assets.Scripts.UI
                     Debug.LogError("Please select a difficulty level.");
                     return;
                 }
-                UIManager.OnGameStartUI?.Invoke(GetBoardSizeForDifficulty(selectedDifficulty), seed);
+                UIManager.OnGameStartUI?.Invoke(GetBoardSizeForDifficulty(selectedDifficulty), selectedDifficulty, seed);
+            });
+
+            loadButton.onClick.AddListener(delegate
+            {
+                SaveData saveData = SaveManager.Load();
+
+                if(saveData == null)
+                {
+                    Debug.LogError("No save data found. Please start a new game.");
+                    return;
+                }
+
+                int selectedDifficulty = saveData.difficultyLevel;
+
+                int seed = saveData.seed;
+
+
+                UIManager.OnGameStartUI?.Invoke(GetBoardSizeForDifficulty(selectedDifficulty), selectedDifficulty, seed);
+                UIManager.OnLoadState?.Invoke(saveData.solvedIDs, saveData.matchCount, saveData.turnCount);
             });
 
             quitButton.onClick.AddListener(() => Application.Quit());
@@ -44,7 +64,7 @@ namespace Assets.Scripts.UI
 
         private void OnEnable()
         {
-            UIManager.OnGameStartUI += ((int, int) tuple, int arg2) => mainMenuPanel.gameObject.SetActive(false);
+            UIManager.OnGameStartUI += ((int, int) tuple, int arg2, int arg3) => mainMenuPanel.gameObject.SetActive(false);
             UIManager.OnGameStopUI += () => mainMenuPanel.gameObject.SetActive(true);
         }
 
@@ -74,7 +94,7 @@ namespace Assets.Scripts.UI
 
         private void OnDisable()
         {
-            UIManager.OnGameStartUI -= ((int, int) tuple, int arg2) => mainMenuPanel.gameObject.SetActive(false);
+            UIManager.OnGameStartUI -= ((int, int) tuple, int arg2, int arg3) => mainMenuPanel.gameObject.SetActive(false);
             UIManager.OnGameStopUI -= () => mainMenuPanel.gameObject.SetActive(true);
         }
     }

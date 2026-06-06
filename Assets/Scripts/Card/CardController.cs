@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.UI;
+﻿using Assets.Scripts.Controller;
+using Assets.Scripts.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Assets.Scripts.Card
 
         public CardView lastDrawnCard = null;
 
-        public static Action<(int, int)> OnBoardGenerateCallback;
+        public static Action<(int, int), int, int> OnBoardGenerateCallback;
 
         public static Action<int> OnTurnComplete;
         public static Action<int> OnMatchComplete;
@@ -35,12 +36,17 @@ namespace Assets.Scripts.Card
             lastDrawnCard = null;
         }
 
-        public void Initiate((int, int) levelDifficulty, int seed)
+        public void Initiate((int, int) levelDimensions, int levelDifficult3y, int seed)
         {
-            List<int> board = BoardGenerator.GenerateBoard(levelDifficulty.Item1, levelDifficulty.Item2, allCardsGameData.AllCards.Length, seed);
-            OnBoardGenerateCallback?.Invoke(levelDifficulty);
+            List<int> board = BoardGenerator.GenerateBoard(levelDimensions.Item1, levelDimensions.Item2, allCardsGameData.AllCards.Length, seed);
+            OnBoardGenerateCallback?.Invoke(levelDimensions, levelDifficult3y,seed);
 
             LayBoard(board);
+        }
+
+        public bool IsCardSolved(int cardId)
+        {
+            return GameManager.Instance.IsCardSolved(cardId);
         }
 
         void LayBoard(List<int> board)
